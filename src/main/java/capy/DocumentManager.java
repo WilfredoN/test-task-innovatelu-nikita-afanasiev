@@ -27,6 +27,7 @@ public class DocumentManager {
             document.setCreated(preDocument.getCreated());
         }
         storage.put(document.getId(), document);
+
         return document;
     }
 
@@ -35,7 +36,6 @@ public class DocumentManager {
      * @return list matched documents
      */
     public List<Document> search(SearchRequest request) {
-
         return storage.values().stream()
                 .filter(document -> request.getTitlePrefixes() == null || request.getTitlePrefixes().isEmpty() || request.getTitlePrefixes().stream().anyMatch(document.getTitle()::startsWith))
                 .filter(document -> request.getContainsContents() == null || request.getContainsContents().isEmpty() || request.getContainsContents().stream().anyMatch(document.getContent()::contains))
@@ -47,13 +47,13 @@ public class DocumentManager {
 
     /**
      * @param id - document id
-     * @return optional document
+     * @return document if it exists, empty otherwise.
      */
     public Optional<Document> findById(String id) {
-
         if (storage.containsKey(id)) {
             return Optional.of(storage.get(id));
         }
+
         return Optional.empty();
     }
 
